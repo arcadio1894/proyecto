@@ -15,21 +15,24 @@ function createProduct() {
         success: function (data) {
             if (data != "") {
                 for (var property in data) {
-                    $('#alerts').append('<div class="alert alert-danger alert-dismissible fade show" role="alert">'+
-                        '<strong>Error!</strong>'+ data[property]+
+                    $('#alerts').append('<div class="alert alert-danger " role="alert">'+
+                        '<strong>Error! </strong>'+ data[property]+
                     '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
                         '<span aria-hidden="true">&times;</span>'+
                     '</button>'+
                     '</div>')
                 }
             } else {
-                $('#alerts').append('<div class="alert alert-success alert-dismissible fade show" role="alert">'+
-                    '<strong>Error!</strong>Producto registrado correctamente'+
+                $('#alerts').append('<div class="alert alert-success" role="alert">'+
+                    '<strong>Éxito! </strong>Producto registrado correctamente'+
                     '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
                     '<span aria-hidden="true">&times;</span>'+
                     '</button>'+
                     '</div>')
             }
+            setTimeout(function () {
+                location.reload();
+            }, 3000)
         },
         error:function (data) {
             console.log(data);

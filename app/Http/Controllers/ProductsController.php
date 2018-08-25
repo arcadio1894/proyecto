@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Brand;
+use App\Category;
 use App\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -25,7 +27,9 @@ class ProductsController extends Controller
      */
     public function create()
     {
-        return view('product.create');
+        $brands = Brand::all();
+        $categories = Category::all();
+        return view('product.create')->with(compact('brands', 'categories'));
     }
 
     /**
@@ -42,7 +46,11 @@ class ProductsController extends Controller
             'descripcion' => 'required|max:255',
             'precio' => 'required|max:5000|numeric',
             'moneda' => 'required|size:3',
-            'color' => 'required'
+            'color' => 'required',
+            'stock' => 'required|numeric|min:1',
+            'marca' => 'required|exists:brands,id',
+            'categoria' => 'required|exists:categories,id',
+
         );
 
         $messages = array(
@@ -57,6 +65,13 @@ class ProductsController extends Controller
             'moneda.required' => 'El campo moneda es requerido',
             'moneda.size' => 'La moneda solo debe tener 3 caracteres',
             'color.required' => 'El campo color es requerido',
+            'stock.required' => 'El campo stock es requerido',
+            'stock.numeric' => 'El campo stock no permite letras',
+            'stock.min' => 'El minimo valor del stock es 1',
+            'marca.required' => 'El campo marca es requerido',
+            'marca.exists' => 'No existe una marca con este identificador',
+            'categoria.required' => 'El campo categoria es requerido',
+            'categoria.exists' => 'No existe una categoria con este identificador',
         );
 
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -75,7 +90,10 @@ class ProductsController extends Controller
                 'money' => $request->get('moneda'),
                 'color' => $request->get('color'),
                 'comment' => '',
-                'state' => 1
+                'state' => 1,
+                'stock' => $request->get('stock'),
+                'brand_id' => $request->get('marca'),
+                'category_id' => $request->get('categoria')
             ]);
 
             $product->save();

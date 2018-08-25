@@ -16,12 +16,20 @@
 @endsection
 
 @section('content')
+    <div class="page-header">
+        <h1>
+            Mantenedor de productos
+            <small>
+                <i class="ace-icon fa fa-angle-double-right"></i>
+                Crear productos
+            </small>
+        </h1>
+    </div><!-- /.page-header -->
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
             <div id="alerts"></div>
             <form id="form-create" action="{{ url('/product/store') }}">
                 {{ csrf_field() }}
-                <legend>Nuevo producto</legend>
 
                 <div class="form-group">
                     <label for="nombre">Nombre</label>
@@ -29,7 +37,7 @@
                 </div>
                 <div class="form-group">
                     <label for="descripcion">Descripción</label>
-                    <input type="text" id="descripcion" class="form-control" name="descripcion" >
+                    <textarea id="descripcion" name="descripcion" class="form-control" rows="3"></textarea>
                 </div>
                 <div class="form-group">
                     <label for="precio">Precio</label>
@@ -40,9 +48,30 @@
                     <input type="text" id="moneda" class="form-control" name="moneda" >
                 </div>
                 <div class="form-group">
+                    <label for="stock">Stock</label>
+                    <input type="text" id="stock" class="form-control" name="stock" >
+                </div>
+                <div class="form-group">
+                    <label for="categoria">Categorías</label>
+                    <select id="categoria" name="categoria" class="form-control">
+                        @foreach($categories as $category)
+                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="marca">Marcas</label>
+                    <select id="marca" name="marca" class="form-control">
+                        @foreach($brands as $brand)
+                            <option value="{{ $brand->id }}">{{ $brand->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group">
                     <label for="color">Color</label>
                     <input type="text" id="color" class="form-control" name="color" >
                 </div>
+
                 <button type="submit" class="btn btn-primary">Guardar datos</button>
                 <button type="reset" class="btn btn-danger">Cancelar</button>
                 <a class="btn btn-warning" href="{{ url('/products') }}">Ver listado</a>
