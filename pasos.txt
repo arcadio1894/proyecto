@@ -1,0 +1,12 @@
+git clone https://github.com/arcadio1894/proyecto.git
+
+composer install
+
+// Cambiar el .env.example -> .env
+php artisan key:generate
+
+// Despues de las clases
+git pull origin master
+
+
+
