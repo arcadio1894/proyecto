@@ -1,4 +1,13 @@
 $(document).ready(function () {
+    var url = $("#typeahead").data('url');
+    $.getJSON(url, function (data) {
+        $(".typeahead").typeahead(
+            {source:data.products}
+        );
+    });
+
+    $(".chosen-select").chosen();
+    $('#descripcion').trumbowyg();
     $formCreate = $('#form-create');
     $formCreate.on('submit', createProduct);
 });

@@ -1,4 +1,12 @@
 $(document).ready(function () {
+    var brand_id = $("#brand_id").val();
+    var category_id = $("#category_id").val();
+    if (brand_id != 0){
+        $('#marca').val(brand_id);
+    }
+    if (category_id != 0){
+        $('#categoria').val(category_id);
+    }
     $formEdit = $('#form-edit');
     $formEdit.on('submit', editProduct);
 });

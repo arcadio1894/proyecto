@@ -102,15 +102,11 @@ class ProductsController extends Controller
         return response()->json($validator->messages(), 200);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Product  $products
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Product $products)
+    public function getProducts()
     {
-
+        $products = Product::get(['name']);
+        $data['products'] = $products;
+        return $data;
     }
 
     /**
@@ -120,10 +116,12 @@ class ProductsController extends Controller
      */
     public function edit($id)
     {
-        $product = Product::find($id);
-        //dd($products);
+        $product = Product::with('brand')->with('category')->find($id);
+        //dd($product);
+        $brands = Brand::all();
+        $categories = Category::all();
 
-        return view('product.edit')->with(compact('product'));
+        return view('product.edit')->with(compact('product', 'brands', 'categories'));
     }
 
     public function update(Request $request)
@@ -135,7 +133,10 @@ class ProductsController extends Controller
             'precio' => 'required|max:5000|numeric',
             'moneda' => 'required|size:3',
             'color' => 'required',
-            'state' => 'required|max:1|min:0'
+            'state' => 'required|max:1|min:0',
+            'stock' => 'required|numeric|min:1',
+            'marca' => 'required|exists:brands,id',
+            'categoria' => 'required|exists:categories,id',
         );
 
         $messages = array(
@@ -151,7 +152,14 @@ class ProductsController extends Controller
             'color.required' => 'El campo color es requerido',
             'state.required' =>'El campo estado es requerido',
             'state.max' =>'El estado es incorrecto',
-            'state.min' => 'El estado es incorrecto'
+            'state.min' => 'El estado es incorrecto',
+            'stock.required' => 'El campo stock es requerido',
+            'stock.numeric' => 'El campo stock no permite letras',
+            'stock.min' => 'El minimo valor del stock es 1',
+            'marca.required' => 'El campo marca es requerido',
+            'marca.exists' => 'No existe una marca con este identificador',
+            'categoria.required' => 'El campo categoria es requerido',
+            'categoria.exists' => 'No existe una categoria con este identificador',
         );
 
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -171,6 +179,9 @@ class ProductsController extends Controller
             $product->color = $request->get('color');
             $product->state = $request->get('state');
             $product->comment = $request->get('comentario');
+            $product->stock = $request->get('stock');
+            $product->brand_id = $request->get('marca');
+            $product->category_id = $request->get('categoria');
 
             $product->save();
         }

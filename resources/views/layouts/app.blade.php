@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta charset="utf-8" />
@@ -32,6 +32,8 @@
     <!--[if lte IE 9]>
     <link rel="stylesheet" href="{{asset('template/assets/css/ace-ie.min.css')}}" />
     <![endif]-->
+
+    @yield('styles')
 
     <!-- inline styles related to this page -->
 

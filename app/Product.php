@@ -14,5 +14,13 @@ class Product extends Model
         'category_id', 'brand_id'
     ];
 
+    public function category(){
+        return $this->belongsTo('App\Category', 'category_id');
+    }
+
+    public function brand(){
+        return $this->belongsTo('App\Brand', 'brand_id');
+    }
+
     protected $dates = ['deleted_at'];
 }
