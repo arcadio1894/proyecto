@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('products', 'open')
+
+@section('create', 'active')
+
 @section('styles')
     <link rel="stylesheet" href="{{asset('plugins/chosen/chosen.min.css')}}" />
     <link rel="stylesheet" href="{{ asset('plugins/trumbowyg/dist/ui/trumbowyg.min.css') }}">

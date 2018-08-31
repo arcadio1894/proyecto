@@ -422,8 +422,8 @@
 
                 <b class="arrow"></b>
             </li>
-
-            <li class="">
+            @if(Auth::user()->role_id == 1)
+                <li class="@yield('products')">
                 <a href="#" class="dropdown-toggle">
                     <i class="menu-icon fa fa-desktop"></i>
                     <span class="menu-text">
@@ -437,7 +437,7 @@
 
                 <ul class="submenu">
 
-                    <li class="">
+                    <li class="@yield('list')">
                         <a href="{{ url('/products') }}">
                             <i class="menu-icon fa fa-caret-right"></i>
                             Listado
@@ -446,7 +446,7 @@
                         <b class="arrow"></b>
                     </li>
 
-                    <li class="">
+                    <li class="@yield('create')">
                         <a href="{{ url('/product/create') }}">
                             <i class="menu-icon fa fa-caret-right"></i>
                             Crear productos
@@ -456,11 +456,11 @@
                     </li>
                 </ul>
             </li>
-
-            <li class="">
+            @endif
+            <li class="@yield('opcionUser')">
                 <a href="#" class="dropdown-toggle">
                     <i class="menu-icon fa fa-list"></i>
-                    <span class="menu-text"> Tables </span>
+                    <span class="menu-text"> Opcion User </span>
 
                     <b class="arrow fa fa-angle-down"></b>
                 </a>
@@ -468,19 +468,50 @@
                 <b class="arrow"></b>
 
                 <ul class="submenu">
-                    <li class="">
-                        <a href="tables.html">
+                    <li class="@yield('historial')">
+                        <a href="{{ url('/history') }}">
                             <i class="menu-icon fa fa-caret-right"></i>
-                            Simple &amp; Dynamic
+                            Historial
+                        </a>
+
+                        <b class="arrow"></b>
+                    </li>
+                    <li class="@yield('perfil')">
+                        <a href="{{ url('/profile') }}">
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            Perfil
                         </a>
 
                         <b class="arrow"></b>
                     </li>
 
-                    <li class="">
-                        <a href="jqgrid.html">
+                </ul>
+            </li>
+
+            <li class="@yield('categories')">
+                <a href="#" class="dropdown-toggle">
+                    <i class="menu-icon fa fa-pencil-square-o"></i>
+                    <span class="menu-text"> Categorias </span>
+
+                    <b class="arrow fa fa-angle-down"></b>
+                </a>
+
+                <b class="arrow"></b>
+
+                <ul class="submenu">
+                    <li class="@yield('category-list')">
+                        <a href="{{ url('categories') }}">
                             <i class="menu-icon fa fa-caret-right"></i>
-                            jqGrid plugin
+                            Listado de categorias
+                        </a>
+
+                        <b class="arrow"></b>
+                    </li>
+
+                    <li class="@yield('category-create')">
+                        <a href="{{ url('category/create') }}">
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            Crear categorias
                         </a>
 
                         <b class="arrow"></b>
@@ -488,10 +519,10 @@
                 </ul>
             </li>
 
-            <li class="">
+            <li class="@yield('brands')">
                 <a href="#" class="dropdown-toggle">
                     <i class="menu-icon fa fa-pencil-square-o"></i>
-                    <span class="menu-text"> Forms </span>
+                    <span class="menu-text"> Marcas </span>
 
                     <b class="arrow fa fa-angle-down"></b>
                 </a>
@@ -499,46 +530,19 @@
                 <b class="arrow"></b>
 
                 <ul class="submenu">
-                    <li class="">
-                        <a href="form-elements.html">
+                    <li class="@yield('brand-list')">
+                        <a href="{{ url('brands') }}">
                             <i class="menu-icon fa fa-caret-right"></i>
-                            Form Elements
+                            Listado de categorias
                         </a>
 
                         <b class="arrow"></b>
                     </li>
 
-                    <li class="">
-                        <a href="form-elements-2.html">
+                    <li class="@yield('brand-create')">
+                        <a href="{{ url('brand/create') }}">
                             <i class="menu-icon fa fa-caret-right"></i>
-                            Form Elements 2
-                        </a>
-
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="form-wizard.html">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            Wizard &amp; Validation
-                        </a>
-
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="wysiwyg.html">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            Wysiwyg &amp; Markdown
-                        </a>
-
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="dropzone.html">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            Dropzone File Upload
+                            Crear categorias
                         </a>
 
                         <b class="arrow"></b>

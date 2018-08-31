@@ -7,6 +7,12 @@ use Illuminate\Http\Request;
 
 class SaleController extends Controller
 {
+    public function getSales(){
+        return view('prueba.sales');
+    }
+    public function getProfile(){
+        return view('prueba.profile');
+    }
     /**
      * Display a listing of the resource.
      *

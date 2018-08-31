@@ -4,82 +4,134 @@ namespace App\Http\Controllers;
 
 use App\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class CategoryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
-        //
+        $categories = Category::all();
+
+        return view('category.index')->with(compact('categories'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        //
+        return view('category.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        $rules = array(
+            'nombre' => 'required|min:6|unique:products,name',
+            'descripcion' => 'required|max:255',
+
+        );
+
+        $messages = array(
+            'nombre.required' => 'El campo nombre es requerido',
+            'nombre.min' => 'Minimo 6 caracteres en el nombre',
+            'nombre.unique' => 'Debe ser unico el nombre',
+            'descripcion.required' => 'El campo descripcion es requerido',
+            'descripcion.max' => 'Maximo 10 caracteres en la descripcion',
+        );
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        $validator->after(function ($validator){
+            if (Auth::user()->role_id > 2) {
+                $validator->errors()->add('role', 'NO tiene permisos para crear un producto');
+            }
+        });
+
+        if (!$validator->fails()) {
+            $category = Category::create([
+                'name' => $request->get('nombre'),
+                'description' => $request->get('descripcion')
+            ]);
+
+            $category->save();
+        }
+
+        return response()->json($validator->messages(), 200);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Category  $category
-     * @return \Illuminate\Http\Response
-     */
     public function show(Category $category)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Category  $category
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Category $category)
+    public function edit($id)
     {
-        //
+        $category = Category::find($id);
+        //dd($product);
+
+        return view('category.edit')->with(compact('category'));
+
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Category  $category
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Category $category)
+    public function update(Request $request)
     {
-        //
+        $rules = array(
+            'nombre' => 'required|min:6|unique:products,name',
+            'descripcion' => 'required|max:255',
+
+        );
+
+        $messages = array(
+            'nombre.required' => 'El campo nombre es requerido',
+            'nombre.min' => 'Minimo 6 caracteres en el nombre',
+            'nombre.unique' => 'Debe ser unico el nombre',
+            'descripcion.required' => 'El campo descripcion es requerido',
+            'descripcion.max' => 'Maximo 10 caracteres en la descripcion',
+        );
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        $validator->after(function ($validator){
+            if (Auth::user()->role_id > 2) {
+                $validator->errors()->add('role', 'NO tiene permisos para crear un producto');
+            }
+        });
+
+        if (!$validator->fails()) {
+            $category = Category::find($request->get('id'));
+            $category->name = $request->get('nombre');
+            $category->description = $request->get('descripcion');
+
+            $category->save();
+        }
+
+        return response()->json($validator->messages(), 200);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Category  $category
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Category $category)
+    public function destroy(Request $request)
     {
-        //
+        $rules = array(
+            'id' => 'exists:categories',
+        );
+
+        $messages = array(
+            'id.exists' => 'El id no existe en la base de datos',
+        );
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        $validator->after(function ($validator){
+            if (Auth::user()->role_id > 2) {
+                $validator->errors()->add('role', 'No tiene permisos para eliminar un producto');
+            }
+        });
+
+        if (!$validator->fails()) {
+            $category = category::find($request->get('id'));
+            $category->delete();
+        }
+
+        //TODO: La categoria no se podrá eliminar si esta en un product
+
+        return response()->json($validator->messages(), 200);
     }
 }

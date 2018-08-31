@@ -11,6 +11,10 @@ use Illuminate\Support\Facades\Validator;
 
 class ProductsController extends Controller
 {
+    public function __construct()
+    {
+        //$this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      */
@@ -189,10 +193,6 @@ class ProductsController extends Controller
         return response()->json($validator->messages(), 200);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     */
     public function destroy(Request $request)
     {
         $rules = array(
