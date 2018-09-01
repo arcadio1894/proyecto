@@ -55,8 +55,10 @@ Route::group(['middleware' => ['auth', 'role:1']], function (){
 });
 
 Route::group(['middleware' => 'auth'], function (){
-    Route::get('/history', 'SaleController@getSales');
     Route::get('/profile', 'SaleController@getProfile');
+    Route::post('/profile', 'SaleController@profile');
 });
+
+
 
 

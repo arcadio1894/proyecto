@@ -110,7 +110,7 @@ class ProductsController extends Controller
     {
         $products = Product::get(['name']);
         $data['products'] = $products;
-        return $data;
+        return response()->json($data);
     }
 
     /**

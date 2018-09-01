@@ -30,14 +30,18 @@
         </h1>
     </div><!-- /.page-header -->
     <div class="row">
-        <form action="" method="post">
-
-            <button type="submit">Enviar</button>
+        <form id="form-date" action="{{ url('/profile') }}" method="post">
+            {{ csrf_field() }}
+            <div class="form-group">
+                <label for="fecha">Fecha Nacimiento</label>
+                <input type="date" id="fecha" class="form-control" name="fecha" >
+            </div>
+            <button class="btn btn-primary" type="submit">Enviar</button>
         </form>
     </div>
 
 @endsection
 
 @section('scripts')
-    <script type="text/javascript" src="{{ asset('js/product/index.js') }}"></script>
+    {{--<script type="text/javascript" src="{{ asset('js/prueba/profile.js') }}"></script>--}}
 @endsection
