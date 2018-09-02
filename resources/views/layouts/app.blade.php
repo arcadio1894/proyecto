@@ -457,10 +457,10 @@
                 </ul>
             </li>
             @endif
-            <li class="@yield('opcionUser')">
+            <li class="@yield('sale')">
                 <a href="#" class="dropdown-toggle">
                     <i class="menu-icon fa fa-list"></i>
-                    <span class="menu-text"> Opcion User </span>
+                    <span class="menu-text"> Compras </span>
 
                     <b class="arrow fa fa-angle-down"></b>
                 </a>
@@ -468,18 +468,18 @@
                 <b class="arrow"></b>
 
                 <ul class="submenu">
-                    <li class="@yield('historial')">
-                        <a href="{{ url('/history') }}">
+                    <li class="@yield('history')">
+                        <a href="{{ url('/sales') }}">
                             <i class="menu-icon fa fa-caret-right"></i>
                             Historial
                         </a>
 
                         <b class="arrow"></b>
                     </li>
-                    <li class="@yield('perfil')">
-                        <a href="{{ url('/profile') }}">
+                    <li class="@yield('sale-create')">
+                        <a href="{{ url('/sale/create') }}">
                             <i class="menu-icon fa fa-caret-right"></i>
-                            Perfil
+                            Crear compra
                         </a>
 
                         <b class="arrow"></b>

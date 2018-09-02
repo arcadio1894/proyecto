@@ -220,4 +220,10 @@ class ProductsController extends Controller
 
         return response()->json($validator->messages(), 200);
     }
+
+    public function getPriceById($id){
+        $product = Product::find($id);
+        //return $product->price;
+        return $product;
+    }
 }

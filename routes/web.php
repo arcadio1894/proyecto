@@ -55,8 +55,14 @@ Route::group(['middleware' => ['auth', 'role:1']], function (){
 });
 
 Route::group(['middleware' => 'auth'], function (){
-    Route::get('/profile', 'SaleController@getProfile');
-    Route::post('/profile', 'SaleController@profile');
+
+    Route::get('/sales', 'SaleController@index');
+
+    Route::group(['prefix' => 'sale'], function (){
+        Route::get('/create', 'SaleController@create');
+        Route::post('/store', 'SaleController@store');
+    });
+    Route::get('/getPriceById/{id}', 'ProductsController@getPriceById');
 });
 
 
