@@ -19,6 +19,7 @@ function addRow() {
     var url = $("#url-quantity").data('url');
     var cantidad = $("#cantidad").val();
     var cantidadP = $("#quantity-product").val();
+    console.log(cantidad + "  " + cantidadP);
     var id = $("#productos").val();
     var nombre = $('#productos option:selected').text();
     var precio = $("#precio").val();
@@ -34,10 +35,10 @@ function addRow() {
         return;
     }
 
-    if (cantidad > cantidadP){
+    /*if ( parseInt(cantidad) > parseInt(cantidadP) ){
         alert('Stock insuficiente');
         return;
-    }
+    }*/
 
     // true si es que hay repetidos y false si no hay repetidos
     if (! hayRepetidos(id)){
@@ -110,26 +111,25 @@ function createSale() {
         method: 'POST',
         data: data,
         success: function (data) {
-            if (data != "") {
-                for (var property in data) {
-                    $('#alerts').append('<div class="alert alert-danger " role="alert">'+
-                        '<strong>Error! </strong>'+ data[property]+
-                    '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
-                        '<span aria-hidden="true">&times;</span>'+
-                    '</button>'+
-                    '</div>')
-                }
+            console.log(data);
+            if (data.error) {
+                $('#alerts').append('<div class="alert alert-danger " role="alert">'+
+                    '<strong>Error! </strong>'+ data.message +
+                '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
+                    '<span aria-hidden="true">&times;</span>'+
+                '</button>'+
+                '</div>')
             } else {
                 $('#alerts').append('<div class="alert alert-success" role="alert">'+
-                    '<strong>Éxito! </strong>Producto registrado correctamente'+
+                    '<strong>Éxito! </strong>'+ data.message +
                     '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
                     '<span aria-hidden="true">&times;</span>'+
                     '</button>'+
                     '</div>')
             }
-            setTimeout(function () {
-                //location.reload();
-            }, 3000)
+            /*setTimeout(function () {
+                location.reload();
+            }, 3000)*/
         },
         error:function (data) {
             console.log(data);

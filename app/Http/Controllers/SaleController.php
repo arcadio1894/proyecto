@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Product;
 use App\Sale;
+use App\SaleDetail;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class SaleController extends Controller
 {
@@ -74,7 +77,65 @@ class SaleController extends Controller
 
     public function store(Request $request)
     {
-        dd($request);
+        //dd($request);
+        $products = json_decode($request->get('productos'));
+
+        $type_doc = $request->get('type_doc');
+        $date_sale = $request->get('fecha');
+        $comment = $request->get('comentario');
+
+        $usuario = Auth::user()->id;
+
+        // TODO: Usar validator
+        if ( ! $date_sale)
+            return response()->json(['error'=>true, 'message'=>'Ingrese fecha']);
+
+        if ( ! $type_doc )
+            return response()->json(['error'=>true, 'message'=>'Seleccione un tipo de documento']);
+
+        // Iniciamos la transaccion
+        DB::beginTransaction();
+
+        try {
+            $sale = Sale::create([
+                'user_id' => $usuario,
+                'state' => 'R',
+                'type_doc' => $type_doc,
+                'sale_date' => $date_sale,
+                'comment' => $comment
+            ]);
+
+            foreach ( $products as $product ){
+                // Lanzar una excepcion cuando no exista el producto
+                $productReal = Product::where('id', $product->id)->first();
+
+                if(!$productReal )
+                    throw new \Exception('El producto '. $product->name . " no se encuentra en la base de datos");
+
+                if ( $productReal->stock < $product->quantity )
+                    throw new \Exception('El producto '. $product->name . " no cuenta con stock suficiente.");
+                SaleDetail::create([
+                    'sale_id' => $sale->id,
+                    'product_id' => $product->id,
+                    'price_unit' => $product->price,
+                    'quantity' => $product->quantity
+                ]);
+
+                $productReal->stock = $productReal->stock - $product->quantity;
+                $productReal->save();
+            }
+
+            DB::commit();
+
+            return response()->json(['error'=>false, 'message' => 'Compra realizada exitosamente']);
+
+        } catch(\Exception $e) {
+            DB::rollBack();
+            return response()->json(['error'=>true, 'message'=> $e->getMessage()]);
+        }
+
+
+
     }
 
     /**

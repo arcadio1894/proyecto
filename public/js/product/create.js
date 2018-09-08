@@ -10,17 +10,36 @@ $(document).ready(function () {
     $('#descripcion').trumbowyg();
     $formCreate = $('#form-create');
     $formCreate.on('submit', createProduct);
+
+    $("#image").change(function () {
+        $("#preview-image").hide();
+        showPreview(this);
+    });
 });
 
 var $formCreate;
 
+function showPreview(input) {
+    if (input.files && input.files[0]){
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            $("#preview-image").attr('src', e.target.result);
+
+        };
+        $("#preview-image").removeAttr("style");
+        reader.readAsDataURL(input.files[0]);
+    }
+
+}
 function createProduct() {
     event.preventDefault();
     var url = $formCreate.attr('action');
     $.ajax({
         url: url,
         method: 'POST',
-        data: $formCreate.serialize(),
+        data: new FormData(this),
+        processData: false,
+        contentType: false,
         success: function (data) {
             if (data != "") {
                 for (var property in data) {
@@ -39,9 +58,9 @@ function createProduct() {
                     '</button>'+
                     '</div>')
             }
-            setTimeout(function () {
+            /*setTimeout(function () {
                 location.reload();
-            }, 3000)
+            }, 3000)*/
         },
         error:function (data) {
             console.log(data);

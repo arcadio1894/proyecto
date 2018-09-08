@@ -1,13 +1,22 @@
 $(document).ready(function () {
     $modalDelete = $('#modal-delete');
+    $modalImage = $('#modal-image');
     $formDelete = $('#form-delete');
     $(document).on('click', '[data-delete]', showModal);
     $formDelete.on('submit', deleteProduct);
     //$('[data-delete]').on('click', mostrar);
+    $(document).on('click', '[data-image]', showImage);
 });
 
 var $modalDelete;
+var $modalImage;
 var $formDelete;
+
+function showImage() {
+    var image = $(this).data('image');
+    $("#imagen-producto").attr('src', image);
+    $modalImage.modal('show');
+}
 
 function showModal() {
     var id = $(this).data('id');

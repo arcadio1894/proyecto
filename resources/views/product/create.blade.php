@@ -40,7 +40,7 @@
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
             <div id="alerts"></div>
-            <form id="form-create" action="{{ url('/product/store') }}">
+            <form id="form-create" action="{{ url('/product/store') }}" enctype="multipart/form-data">
                 {{ csrf_field() }}
 
                 <div class="form-group">
@@ -86,6 +86,12 @@
                 <div class="form-group">
                     <label for="color">Color</label>
                     <input type="text" id="color" class="form-control" name="color" >
+                </div>
+
+                <div class="form-group">
+                    <label for="image">Imagen del producto</label>
+                    <input type="file" id="image" class="form-control" name="image" >
+                    <img style="display: none;" src="#" alt="Preview" class="img-responsive" id="preview-image">
                 </div>
 
                 <button type="submit" class="btn btn-primary">Guardar datos</button>

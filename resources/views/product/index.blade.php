@@ -56,6 +56,7 @@
                             <td>{{ $product->money }}</td>
                             <td>{{ $product->color }}</td>
                             <td>
+                                <a class="btn btn-success" data-image="{{ asset('/images/'.$product->image) }}">Imagen</a>
                                 <a class="btn btn-primary" href="{{ url('/product/edit/'.$product->id) }}">Editar</a>
                                 <a class="btn btn-danger" data-delete data-id="{{ $product->id }}" data-name="{{ $product->name }}">Eliminar</a>
                             </td>
@@ -93,6 +94,20 @@
         </div>
     </div>
 </div>
+<div id="modal-image" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Imagen producto</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <img src="#" alt="" class="img-responsive" id="imagen-producto">
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @section('scripts')

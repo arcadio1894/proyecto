@@ -8,6 +8,8 @@ use App\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Intervention\Image\Facades\Image;
+
 
 class ProductsController extends Controller
 {
@@ -54,6 +56,7 @@ class ProductsController extends Controller
             'stock' => 'required|numeric|min:1',
             'marca' => 'required|exists:brands,id',
             'categoria' => 'required|exists:categories,id',
+            'image' => 'required|image'
 
         );
 
@@ -76,6 +79,8 @@ class ProductsController extends Controller
             'marca.exists' => 'No existe una marca con este identificador',
             'categoria.required' => 'El campo categoria es requerido',
             'categoria.exists' => 'No existe una categoria con este identificador',
+            'image.required' => 'El campo imagen es requerido',
+            'image.image' => 'El archivo debe ser una imagen',
         );
 
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -87,6 +92,7 @@ class ProductsController extends Controller
         });
 
         if (!$validator->fails()) {
+
             $product = Product::create([
                 'name' => $request->get('nombre'),
                 'description' => $request->get('descripcion'),
@@ -99,6 +105,14 @@ class ProductsController extends Controller
                 'brand_id' => $request->get('marca'),
                 'category_id' => $request->get('categoria')
             ]);
+
+            $extension = $request->file('image')->getClientOriginalExtension();
+            $image_name = $product->id . "." . $extension;
+
+            $img = Image::make($request->file('image'))
+                ->resize(150,150)
+                ->save('images/'.$image_name);
+            $product->image = $image_name;
 
             $product->save();
         }
