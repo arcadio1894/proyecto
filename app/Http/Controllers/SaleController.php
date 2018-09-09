@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SaleController extends Controller
 {
@@ -152,6 +153,27 @@ class SaleController extends Controller
         $pdf->loadHTML($vista);
         //return $pdf->download();
         return $pdf->stream();
+    }
+
+    public function reportEXCEL(Request $request){
+        $fechaI = $request->get('fechaI');
+        $fechaF = $request->get('fechaF');
+
+        $sales = Sale::whereBetween('sale_date', [$fechaI, $fechaF])->with('details')->with('user')->get();
+        //dd($sales);
+        $vista = view('report.pdfSales', compact('sales', 'fechaI', 'fechaF'))->render();
+
+        Excel::create('New file', function($excel) use ($vista, $sales, $fechaI, $fechaF) {
+
+            $excel->sheet('New sheet', function($sheet) use ($vista, $sales, $fechaI, $fechaF) {
+
+                $sheet->loadView( 'report.excelSales' )->with('sales',$sales)
+                    ->with('fechaI',$fechaI)->with('fechaF',$fechaF);
+                $sheet->setOrientation('landscape');
+
+            });
+
+        })->export('xlsx');
     }
 
     /**

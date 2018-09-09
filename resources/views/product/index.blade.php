@@ -32,6 +32,7 @@
 
     <div class="row">
         <div class="col-md-10 col-md-offset-1">
+            <a class="btn btn-info" href="{{ url('/product/reportEXCEL') }}">Reporte EXCEL</a>
             <a class="btn btn-success" href="{{ url('/product/reportPDF') }}">Reporte PDF</a>
             <a class="btn btn-primary" href="{{ url('/product/create') }}">Nuevo producto</a>
             <div class="space-6"></div>

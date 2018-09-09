@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use App\Brand;
 use App\Category;
 use App\Product;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\Facades\Image;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 class ProductsController extends Controller
@@ -250,5 +252,89 @@ class ProductsController extends Controller
         $pdf = App::make('dompdf.wrapper');
         $pdf->loadHTML($vista);
         return $pdf->stream();
+    }
+
+    public function reportEXCEL(){
+        $products = Product::with('category')->with('brand')->get();
+        $date = Carbon::now();
+
+
+        Excel::create('Productos', function ($excel) use ($products, $date){
+            $excel->sheet('Listado', function ($sheet) use ($products, $date){
+                //dd($products);
+
+                $data = [];
+                $sheet->mergeCells('A1:I1');
+                $sheet->getDefaultStyle()
+                    ->getAlignment()
+                    ->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_JUSTIFY);
+                array_push($data, ['REPORTE DE PRODUCTOS AL '.$date->format('d-m-Y')]);
+                array_push($data, ['']);
+                array_push($data, ['ID Producto','Nombre','Descripción','Precio','Moneda','Color','Categoría','Marca','Stock']);
+
+                foreach ($products as $product){
+                    if (!isset($product->category->name))
+                        $categoria = 'Sin categoría';
+                    else
+                        $categoria = $product->category->name;
+
+                    if (!isset($product->brand->name))
+                        $marca = 'Sin marca';
+                    else
+                        $marca = $product->brand->name;
+                    array_push($data, [$product->id, $product->name, $product->description, $product->price, $product->money, $product->color, $categoria, $marca, $product->stock]);
+                }
+
+                $sheet->cells('A1:I1', function($cells) {
+                    $cells->setBackground('#3A5AE4');
+
+                    $cells->setFont(array(
+                        'family'     => 'Arial',
+                        'size'       => '16',
+                        'bold'       =>  true
+                    ));
+
+                });
+
+
+                $countProducts = count($products)+3;
+
+                for ($i = 3; $i<=$countProducts; ++$i){
+                    $sheet->cells('A'.$i.':I'.$i, function($cells) {
+                        $cells->setBackground('#20E329');
+
+                        $cells->setFont(array(
+                            'family'     => 'Arial',
+                            'size'       => '14',
+                            'bold'       =>  true
+                        ));
+
+                        $cells->setBorder('thin', 'thin', 'thin', 'thin');
+
+                    });
+                }
+
+
+                $sheet->cells('A4:I'.$countProducts, function($cells) {
+                    $cells->setBackground('#D1F13B');
+
+                    $cells->setFont(array(
+                        'family'     => 'calibri',
+                        'size'       => '12'
+                    ));
+
+                    $cells->setBorder('thin', 'thin', 'thin', 'thin');
+                });
+
+                $sheet->setAutoSize(true);
+
+                $sheet->setWidth('C', 60);
+                $sheet->setWidth('E', 20);
+
+
+
+                $sheet->fromArray($data, null, 'A1', false, false);
+            });
+        })->export('xlsx');
     }
 }

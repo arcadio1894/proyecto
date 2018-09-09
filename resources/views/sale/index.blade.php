@@ -45,6 +45,20 @@
                 <button type="submit">Generar PDF</button>
             </form>
         </div>
+        <div class="col-md-6 col-md-offset-3">
+            <form action="{{ url('/sale/reportE') }}" method="post">
+                {{ csrf_field() }}
+                <div class="form-group">
+                    <label for="fechaI">Fecha de inicio</label>
+                    <input type="date" id="fechaI" name="fechaI" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="fechaF">Fecha de fin</label>
+                    <input type="date" id="fechaF" name="fechaF" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-success">Generar EXCEL</button>
+            </form>
+        </div>
         {{--<div class="col-md-10 col-md-offset-1">
 
             <a class="btn btn-success" href="{{ url('/product/reportPDF') }}">Reporte PDF</a>

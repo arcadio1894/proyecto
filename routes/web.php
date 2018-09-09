@@ -54,8 +54,11 @@ Route::group(['middleware' => ['auth', 'role:1']], function (){
     Route::get('/productos', 'ProductsController@getProducts');
     Route::get('/product/reportPDF', 'ProductsController@reportPDF');
     Route::post('/sale/report', 'SaleController@reportPDF');
+    Route::post('/sale/reportE', 'SaleController@reportEXCEL');
 
     Route::get('/sales', 'SaleController@index');
+
+    Route::get('/product/reportEXCEL', 'ProductsController@reportEXCEL');
 });
 
 Route::group(['middleware' => 'auth'], function (){
