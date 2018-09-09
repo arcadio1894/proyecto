@@ -14,7 +14,7 @@ class Sale extends Model
     ];
 
     public function details(){
-        return $this->hasMany('App\Detail', 'sale_id');
+        return $this->hasMany('App\SaleDetail', 'sale_id');
     }
 
     public function user(){

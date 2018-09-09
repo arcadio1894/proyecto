@@ -6,6 +6,7 @@ use App\Brand;
 use App\Category;
 use App\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\Facades\Image;
@@ -239,5 +240,15 @@ class ProductsController extends Controller
         $product = Product::find($id);
         //return $product->price;
         return $product;
+    }
+
+    public function reportPDF(){
+        $products = Product::with('category')->with('brand')->get();
+        //dd($products[0]->brand->name);
+        $vista = view('report.pdfProducts', compact('products'))->render();
+
+        $pdf = App::make('dompdf.wrapper');
+        $pdf->loadHTML($vista);
+        return $pdf->stream();
     }
 }

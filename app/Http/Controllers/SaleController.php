@@ -8,6 +8,7 @@ use App\SaleDetail;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -65,7 +66,7 @@ class SaleController extends Controller
      */
     public function index()
     {
-        //
+        return view('sale.index');
     }
 
     public function create()
@@ -136,6 +137,21 @@ class SaleController extends Controller
 
 
 
+    }
+
+    public function reportPDF(Request $request){
+        $fechaI = $request->get('fechaI');
+        $fechaF = $request->get('fechaF');
+
+
+        $sales = Sale::whereBetween('sale_date', [$fechaI, $fechaF])->with('details')->with('user')->get();
+        //dd($sales);
+        $vista = view('report.pdfSales', compact('sales', 'fechaI', 'fechaF'))->render();
+
+        $pdf = App::make('dompdf.wrapper');
+        $pdf->loadHTML($vista);
+        //return $pdf->download();
+        return $pdf->stream();
     }
 
     /**

@@ -14,7 +14,7 @@ class Brand extends Model
     ];
 
     public function products(){
-        return $this->hasMany('App\Products', 'brand_id');
+        return $this->hasMany('App\Product', 'brand_id');
     }
 
     protected $dates = ['deleted_at'];

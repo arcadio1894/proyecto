@@ -1,19 +1,19 @@
 @extends('layouts.app')
 
-@section('products', 'open')
+@section('sale', 'open')
 
-@section('list', 'active')
+@section('history', 'active')
 
 @section('breadcrumbs')
     <div class="breadcrumbs ace-save-state" id="breadcrumbs">
         <ul class="breadcrumb">
             <li>
                 <i class="ace-icon fa fa-home home-icon"></i>
-                <a href="#">Productos</a>
+                <a href="#">Compras</a>
             </li>
 
             <li>
-                <a href="#">Listado de productos</a>
+                <a href="#">Listado de compras</a>
             </li>
         </ul><!-- /.breadcrumb -->
     </div>
@@ -22,7 +22,7 @@
 @section('content')
     <div class="page-header">
         <h1>
-            Lista de Productos
+            Lista de Compras
             <small>
                 <i class="ace-icon fa fa-angle-double-right"></i>
                 Productos listados
@@ -31,9 +31,23 @@
     </div><!-- /.page-header -->
 
     <div class="row">
-        <div class="col-md-10 col-md-offset-1">
+        <div class="col-md-6 col-md-offset-3">
+            <form action="{{ url('/sale/report') }}" method="post">
+                {{ csrf_field() }}
+                <div class="form-group">
+                    <label for="fechaI">Fecha de inicio</label>
+                    <input type="date" id="fechaI" name="fechaI" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="fechaF">Fecha de fin</label>
+                    <input type="date" id="fechaF" name="fechaF" class="form-control">
+                </div>
+                <button type="submit">Generar PDF</button>
+            </form>
+        </div>
+        {{--<div class="col-md-10 col-md-offset-1">
+
             <a class="btn btn-success" href="{{ url('/product/reportPDF') }}">Reporte PDF</a>
-            <a class="btn btn-primary" href="{{ url('/product/create') }}">Nuevo producto</a>
             <div class="space-6"></div>
             <div id="alerts"></div>
             <table class="table table-hover">
@@ -66,9 +80,9 @@
 
                     </tbody>
               </table>
-        </div>
+        </div>--}}
     </div>
-<div id="modal-delete" class="modal" tabindex="-1" role="dialog">
+{{--<div id="modal-delete" class="modal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -107,7 +121,7 @@
             <img src="#" alt="" class="img-responsive" id="imagen-producto">
         </div>
     </div>
-</div>
+</div>--}}
 
 @endsection
 
