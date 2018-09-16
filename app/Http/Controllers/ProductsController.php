@@ -25,7 +25,14 @@ class ProductsController extends Controller
      */
     public function index()
     {
-        $products = Product::all();
+        // Incorrecto
+        //$products = Product::all();
+
+        // Correcto
+        $products = Product::paginate(10,['id', 'name', 'description', 'price', 'money', 'color', 'image']);
+
+        // Otro incorrecto
+        //$products = Product::paginate(10);
 
         return view('product.index')->with(compact('products'));
     }
@@ -137,7 +144,16 @@ class ProductsController extends Controller
      */
     public function edit($id)
     {
-        $product = Product::with('brand')->with('category')->find($id);
+        // Incorrecto
+        //$product = Product::with('brand')->with('category')->find($id);
+        $product = Product::with([
+            'brand' => function($query) {
+                $query->select('id', 'name');
+            },
+            'category' => function($query) {
+                $query->select('id', 'name');
+            }
+        ])->find($id, ['id', 'name']);
         //dd($product);
         $brands = Brand::all();
         $categories = Category::all();
