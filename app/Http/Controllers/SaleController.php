@@ -2,19 +2,59 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\SendEmailTest;
 use App\Product;
 use App\Sale;
 use App\SaleDetail;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Mail\Message;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
 
 class SaleController extends Controller
 {
+    public  function  sendMailable(){
+        // TODO: Envio de data en forma estatica al constructor del Mailable
+        /*$email = "joryes1894@gmail.com";
+        Mail::to($email)->send(new SendEmailTest('Jorge Gonzales'));*/
+
+        // Enviar toda la data de un usuario
+        $email = "joryes1894@gmail.com";
+        $user = User::where('email', $email)->first();
+        Mail::to($email)->send(new SendEmailTest($user));
+
+    }
+    public function send(){
+        // TODO: Primera forma creando un array con algunos datos del usuario
+        /*$email = "joryes1894@gmail.com";
+        $user = User::where('email', $email)->first();
+        //$email = ["joryes1894@gmail.com", "edesceperu@gmail.com"];
+        $emails = $user->email;
+        Mail::send('emails.correo', ['name'=>$user->name, 'email'=>$user->email, 'created_at'=>$user->created_at], function (Message $message) use ($emails){
+            $message->to($emails)->subject('Correo de prueba');
+            $message->attach('assets/prueba.pdf', array(
+                'as' => 'PdfReport.pdf',
+                'mime' => 'application/pdf'
+            ));
+        });*/
+
+        // TODO: Segunda forma enviando todos los datos del usuario como array
+        $email = "joryes1894@gmail.com";
+        $user = User::where('email', $email)->first()->toArray();
+        Mail::send('emails.correo', $user, function (Message $message) use ($email){
+            $message->to($email)->subject('Correo de prueba');
+            $message->attach('assets/prueba.pdf', array(
+                'as' => 'PdfReport.pdf',
+                'mime' => 'application/pdf'
+            ));
+        });
+    }
+
     public function getProfile(){
         return view('prueba.profile');
     }

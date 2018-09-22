@@ -72,6 +72,9 @@ Route::group(['middleware' => 'auth'], function (){
     Route::get('/getPriceById/{id}', 'ProductsController@getPriceById');
 });
 
+Route::get('/send', 'SaleController@send');
+Route::get('/sendMailable', 'SaleController@sendMailable');
+
 
 
 
