@@ -29,10 +29,20 @@ class ProductsController extends Controller
         //$products = Product::all();
 
         // Correcto
-        $products = Product::paginate(10,['id', 'name', 'description', 'price', 'money', 'color', 'image']);
+        //$products = Product::paginate(10,['id', 'name', 'description', 'price', 'money', 'color', 'image']);
 
         // Otro incorrecto
         //$products = Product::paginate(10);
+
+        // EAGER LOADING
+        $products = Product::with([
+            'brand' => function($query) {
+                $query->select('id', 'name');
+            },
+            'category' => function($query) {
+                $query->select('id', 'name');
+            }
+        ])->paginate(10);
 
         return view('product.index')->with(compact('products'));
     }

@@ -44,6 +44,8 @@
                             <th>Descripción</th>
                             <th>Precio</th>
                             <th>Moneda</th>
+                            <th>Categoria</th>
+                            <th>Marca</th>
                             <th>Color</th>
                             <th>Acciones</th>
                         </tr>
@@ -56,6 +58,17 @@
                             <td>{!! $product->description !!}</td>
                             <td>{{ $product->price }}</td>
                             <td>{{ $product->money }}</td>
+                            @if(isset($product->category->name ))
+                                <td>{{ $product->category->name }}</td>
+                            @else
+                                <td>Sin categoria</td>
+                            @endif
+                            @if(isset($product->brand->name ))
+                                <td>{{ $product->brand->name }}</td>
+                            @else
+                                <td>Sin Marca</td>
+                            @endif
+
                             <td>{{ $product->color }}</td>
                             <td>
                                 <a class="btn btn-success" data-image="{{ asset('/images/'.$product->image) }}">Imagen</a>
